@@ -1,6 +1,9 @@
 collectd_ntp
 ============
 
+.. image:: https://travis-ci.org/ministryofjustice/collectd-ntp.svg?branch=master
+    :target: https://travis-ci.org/ministryofjustice/collectd-ntp
+
 A collectd plugin to fetch NTP offsets from a pool.
 
 Installation
