@@ -18,7 +18,7 @@ INTERVAL = 60
 
 
 def warn(msg):
-    collectd.warning('collectd_ntp plugin: {msg}'.format(msg=msg))
+    collectd.warning('ntpoffset plugin: {msg}'.format(msg=msg))
 
 
 class NtpOffsetConfigException(Exception):
