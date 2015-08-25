@@ -30,10 +30,10 @@ To configure the plugin:
     </LoadPlugin>
 
     <Plugin python>
-      Import "collectd_ntp"
+      Import "ntpoffset"
 
-      <Module "collectd_ntp">
+      <Module "ntpoffset">
         # NTP pool address
-        pool "127.0.0.1"
+        pool "pool.ntp.org"
       </Module>
     </Plugin>
