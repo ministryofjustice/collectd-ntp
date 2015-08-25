@@ -5,6 +5,7 @@ CollectD plugin which measures NTP offsets
 # TODO - discount wildly different responses
 
 from __future__ import division
+import calendar
 import datetime
 
 import collectd
@@ -89,7 +90,7 @@ class NtpOffset(object):
         v.plugin_instance = 'offset'
         v.type = 'time_offset'
         v.type_instance = type_instance
-        v.time = datetime.datetime.now().isoformat()
+        v.time = calendar.timegm(datetime.datetime.utcnow().utctimetuple())
         v.values = values
         v.dispatch()
 
