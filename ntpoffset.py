@@ -76,13 +76,13 @@ class NtpOffset(object):
 
     def submit_average(self, offsets):
         print offsets
-        self.submit('average', [sum(offsets) / float(len(offsets))])
+        self.submit('average', [sum(offsets) / len(offsets)])
 
     def submit_min(self, offsets):
-        self.submit('min', [float(min(offsets))])
+        self.submit('min', [min(offsets)])
 
     def submit_max(self, offsets):
-        self.submit('max', [float(max(offsets))])
+        self.submit('max', [max(offsets)])
 
     def submit(self, type_instance, values):
         v = collectd.Values()
