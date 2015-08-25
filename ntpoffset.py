@@ -75,7 +75,6 @@ class NtpOffset(object):
             return []
 
     def submit_average(self, offsets):
-        print offsets
         self.submit('average', [sum(offsets) / len(offsets)])
 
     def submit_min(self, offsets):
