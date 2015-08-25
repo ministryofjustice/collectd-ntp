@@ -4,6 +4,7 @@
 from __future__ import division, with_statement
 import collections
 import contextlib
+import datetime
 import mock
 import unittest
 
@@ -172,3 +173,20 @@ class NtpOffsetPluginTest(unittest.TestCase):
 
                 for metric in metrics:
                     self.assertEqual([0.13579], metric.values)
+
+    def test_metric_has_unix_timestamp(self):
+        config = MockConfig(pool=['127.0.0.1'])
+
+        with dns_query(test_pool):
+            with ntp_offsets([0.1234, 0.2345]):
+
+                metrics = mock_metrics()
+                self.collectd.Values.side_effect = metrics
+
+                self.plugin(config).read()
+
+                now = datetime.datetime.now()
+                tolerance = datetime.timedelta(seconds=3)
+                for metric in metrics:
+                    time = datetime.datetime.utcfromtimestamp(metric.time)
+                    self.assertTrue(tolerance > now - time)
