@@ -189,4 +189,4 @@ class NtpOffsetPluginTest(unittest.TestCase):
                 tolerance = datetime.timedelta(seconds=3)
                 for metric in metrics:
                     time = datetime.datetime.utcfromtimestamp(metric.time)
-                    self.assertLess(tolerance, now - time)
+                    self.assertTrue(tolerance > now - time)
