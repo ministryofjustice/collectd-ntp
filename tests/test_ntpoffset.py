@@ -79,7 +79,7 @@ class NtpOffsetPluginTest(unittest.TestCase):
         return self.ntpoffset.NtpOffset(*args)
 
     def test_plugin_identifies_itself(self):
-        self.assertEqual('collectd_ntp', self.plugin().PLUGIN_NAME)
+        self.assertEqual('ntpoffset', self.plugin().PLUGIN_NAME)
 
     def test_minimal_config_requires_pool_name(self):
         try:

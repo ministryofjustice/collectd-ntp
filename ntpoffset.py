@@ -25,7 +25,7 @@ class NtpOffsetConfigException(Exception):
 
 
 class NtpOffset(object):
-    PLUGIN_NAME = 'collectd_ntp'
+    PLUGIN_NAME = 'ntpoffset'
 
     def __init__(self, config=None):
         self.pool = None
