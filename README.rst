@@ -6,6 +6,8 @@ collectd_ntp
 
 A collectd plugin to fetch NTP offsets from a pool.
 
+The default update interval is 60 seconds.
+
 Installation
 ------------
 
