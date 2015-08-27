@@ -25,22 +25,33 @@ class NtpOffsetConfigException(Exception):
     pass
 
 
+def is_true(value):
+    return str(value).lower() in ['true', 'yes', 't', '1', 'on']
+
+
 class NtpOffset(object):
     PLUGIN_NAME = 'ntpoffset'
 
     def __init__(self, config=None):
         self.pool = None
+        self.absolutes = False
         self.ntp_client = ntplib.NTPClient()
         if config:
             self.config(config)
 
     def config(self, conf):
-        entries = [node for node in conf.children if node.key == 'pool']
+        for node in conf.children:
+          if node.key == 'pool':
+            config_pool = node
+          elif node.key == 'absolutes':
+            self.absolutes = is_true(node.values[0])
+          else:
+            warn('unknown config key {key}'.format(key=node.key))
 
         try:
-            self.pool = entries[0].values[0]
+            self.pool = config_pool.values[0]
 
-        except IndexError:
+        except UnboundLocalError:
             raise NtpOffsetConfigException('No pool specified')
 
     def read(self):
@@ -78,9 +89,13 @@ class NtpOffset(object):
         self.submit('average', [sum(offsets) / len(offsets)])
 
     def submit_min(self, offsets):
+        if self.absolutes:
+            offsets = map(abs, offsets)
         self.submit('min', [min(offsets)])
 
     def submit_max(self, offsets):
+        if self.absolutes:
+            offsets = map(abs, offsets)
         self.submit('max', [max(offsets)])
 
     def submit(self, type_instance, values):

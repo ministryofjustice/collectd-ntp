@@ -135,6 +135,29 @@ class NtpOffsetPluginTest(unittest.TestCase):
                         expected.type_instance, metric.type_instance)
                     self.assertEqual(expected.values, metric.values)
 
+    def test_metric_is_absolute_avg_min_and_max_offset(self):
+        config = MockConfig(pool=['127.0.0.1'], absolutes=['true'])
+        offsets = [-0.33579, 0.2468]
+        expected = [
+            ExpectedMetric('average', [sum(offsets) / len(offsets)]),
+            ExpectedMetric('min', [min(map(abs, offsets))]),
+            ExpectedMetric('max', [max(map(abs, offsets))])
+        ]
+
+        with ntp_offsets(offsets):
+            with dns_query(test_pool):
+
+                metrics = mock_metrics()
+                self.collectd.Values.side_effect = metrics
+
+                self.plugin(config).read()
+
+                for metric, expected in zip(metrics, expected):
+                    assert metric.dispatch.called
+                    self.assertEqual(
+                        expected.type_instance, metric.type_instance)
+                    self.assertEqual(expected.values, metric.values)
+
     def test_nothing_submitted_if_no_pool_servers(self):
         config = MockConfig(pool=['127.0.0.1'])
 
@@ -185,7 +208,7 @@ class NtpOffsetPluginTest(unittest.TestCase):
 
                 self.plugin(config).read()
 
-                now = datetime.datetime.now()
+                now = datetime.datetime.utcnow()
                 tolerance = datetime.timedelta(seconds=3)
                 for metric in metrics:
                     time = datetime.datetime.utcfromtimestamp(metric.time)
